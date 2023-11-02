@@ -1,17 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Patients from './pages/Patients';
-import Medecins from './pages/Medecins';
+import Services from './pages/Services';
 
 function App() {
   return (
-    <Patients/>
-    // <Router>
-    //   <div>
-    //       <Route path="/patients" exact component={Patients} />
-    //       <Route path='/patients/:id_service' exact component={Medecins}/>
-    //   </div>
-    // </Router>
+    <div>
+      <Services/>
+    </div>
   );
 }
 

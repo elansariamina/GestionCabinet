@@ -10,7 +10,7 @@ export const SERVICES =
     },
     {
         "id": 3,
-        "name": "Chirurgie cardiaque"
+        "name": "Cardiologie"
     },
     {
         "id": 4,
