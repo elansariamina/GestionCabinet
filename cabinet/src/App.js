@@ -5,12 +5,13 @@ import Medecins from './pages/Medecins';
 
 function App() {
   return (
-    <Router>
-      <div>
-          <Route path="/patients" exact component={Patients} />
-          <Route path='/patients/:id_service' exact component={Medecins}/>
-      </div>
-    </Router>
+    <Patients/>
+    // <Router>
+    //   <div>
+    //       <Route path="/patients" exact component={Patients} />
+    //       <Route path='/patients/:id_service' exact component={Medecins}/>
+    //   </div>
+    // </Router>
   );
 }
 
