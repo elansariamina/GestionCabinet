@@ -2,7 +2,16 @@ import React from 'react'
 
 function FirstSection() {
   return (
-    <div className='bg-gray-500'>FirstSection</div>
+    <>
+        <div>
+            <div className='font-cursive font-bold'>
+                Our <span className='text-blue-400'>expertise</span> in your service
+            </div>
+            <div>
+                
+            </div>
+        </div>  
+    </>
   )
 }
 

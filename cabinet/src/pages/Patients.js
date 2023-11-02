@@ -1,10 +1,10 @@
 import React from 'react'
-import FirstSection from '../components/FirstSection'
+import Services from './Services'
 
 function Patients() {
   return (
     <div>
-        <FirstSection />
+        <Services />
     </div>
   )
 }
