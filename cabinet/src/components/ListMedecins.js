@@ -40,7 +40,7 @@ export const MEDECINS =
         tel: "555-987-6543",
         address: "456 Pine Street",
         email: "sarah@example.com",
-        speciality: "Pediatrie",
+        speciality: "Pédiatrie",
         image_url: doctor4,
     },
     {

@@ -1,10 +1,17 @@
 import React from 'react';
-import Services from './pages/Services';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Patients from './pages/Patients';
+import Medecins from './pages/Medecins';
 
 function App() {
   return (
     <div>
-      <Services/>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Patients />} />
+          <Route path="/patients/:name" element={<Medecins />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

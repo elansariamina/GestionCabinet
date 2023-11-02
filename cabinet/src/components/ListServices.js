@@ -22,7 +22,7 @@ export const SERVICES =
     },
     {
         "id": 6,
-        "name": "Gynécologie et obstétrique"
+        "name": "Gynécologie"
     },
     {
         "id": 7,
