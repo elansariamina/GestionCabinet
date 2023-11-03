@@ -10,7 +10,7 @@ export const SERVICES =
     },
     {
         "id": 3,
-        "name": "Chirurgie cardiaque"
+        "name": "Cardiologie"
     },
     {
         "id": 4,
@@ -22,7 +22,7 @@ export const SERVICES =
     },
     {
         "id": 6,
-        "name": "Gynécologie et obstétrique"
+        "name": "Gynécologie"
     },
     {
         "id": 7,
