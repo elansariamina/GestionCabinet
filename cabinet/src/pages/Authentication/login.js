@@ -17,8 +17,16 @@ const Login = () => {
       });
 
       const { token } = response.data;
+      const { role } = response.data;
       localStorage.setItem('accessToken', token);
-      navigate('/home');
+      localStorage.setItem('role', role);
+
+      if(role === "patient"){
+        navigate('/home');
+      } else {
+        navigate('/');
+      }
+
     } catch (error) {
       console.error('Login failed:', error);
     }
