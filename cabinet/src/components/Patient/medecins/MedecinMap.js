@@ -7,9 +7,14 @@ import axios from 'axios';
 function MedecinMap() {
     const { name } = useParams();
     const [doctorsData, setDoctorsData] = useState([]);
+    const token = localStorage.getItem('accessToken'); 
 
     useEffect(() => {
-      axios.get("http://localhost:3001/api/doctors")
+      axios.get("http://localhost:3001/api/doctors", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(response => {
           setDoctorsData(response.data);
           console.log(response.data);
