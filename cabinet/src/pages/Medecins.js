@@ -9,7 +9,7 @@ function Medecins() {
     const [doctorsData, setDoctorsData] = useState([]);
 
     useEffect(() => {
-      axios.get("http://localhost:3000/api/doctors")
+      axios.get("http://localhost:3001/api/doctors")
       .then(response => {
           setDoctorsData(response.data);
           console.log(response.data);
