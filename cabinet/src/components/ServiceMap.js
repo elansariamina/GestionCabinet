@@ -1,13 +1,26 @@
-import React from 'react'
-import {SERVICES} from './ListServices';
+import React , { useEffect, useState } from 'react'
 import ServiceCard from './ServiceCard';
+import axios from 'axios';
+
 
 function ServiceMap() {
+  const [servicesData, setServicesData] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/api/services")
+    .then(response => {
+        setServicesData(response.data);
+        console.log(response.data);
+    })
+    .catch(error => {
+      console.error("Error: ", error);
+    });
+  }, [])
 
   return (
     <>
     <div className='flex flex-wrap'>
-    {SERVICES.map((service) => (
+    {servicesData.map((service) => (
         <a href={`/patients/${service.name}`} key={service.id}>
             <div className='flex justify-center p-2'>
             <ServiceCard name={service.name} />
