@@ -1,5 +1,5 @@
 import React from 'react'
-import ServiceMap from '../components/ServiceMap'
+import ServiceMap from '../../components/Patient/Services/ServiceMap'
 
 function Services() {
   return (

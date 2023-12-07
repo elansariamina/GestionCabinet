@@ -1,5 +1,5 @@
 import React from 'react';
-import Scheduler from "../components/Scheduler";
+import Scheduler from "../../components/Patient/RDV/Scheduler";
 
 const Appointment = () => {
     return (

@@ -1,5 +1,5 @@
 import React from 'react'
-import service from './../assets/images/medecin.jpg';
+import service from './../../../assets/images/medecin.jpg';
 
 function ServiceCard({
     name

@@ -1,5 +1,5 @@
 import React from 'react'
-import Img from './../assets/images/medecin.jpg';
+import Img from "./../../../assets/images/medecin.jpg";
 
 function MedecinCard({doctor}) {
   return (

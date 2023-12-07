@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import MedecinCard from '../components/MedecinCard';
+import MedecinCard from './MedecinCard';
 import axios from 'axios';
 
 
-function Medecins() {
+function MedecinMap() {
     const { name } = useParams();
     const [doctorsData, setDoctorsData] = useState([]);
 
@@ -33,4 +33,4 @@ function Medecins() {
   )
 }
 
-export default Medecins
+export default MedecinMap

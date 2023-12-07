@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Patients from './pages/Patients';
-import Medecins from './pages/Medecins';
-import Appointment from "./pages/Appointment";
+import Patients from './pages/Patient/Patients';
+import Medecins from './pages/Patient/Medecins';
+import Appointment from "./pages/Patient/Appointment";
 
 function App() {
   return (
