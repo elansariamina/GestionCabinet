@@ -1,10 +1,10 @@
 import React from 'react'
-import Services from './Services'
+import Acceuil from './Acceuil'
 
 function Patients() {
   return (
     <div>
-        <Services />
+       <Acceuil />
     </div>
   )
 }

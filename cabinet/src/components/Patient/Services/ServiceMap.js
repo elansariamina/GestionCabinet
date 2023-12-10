@@ -24,7 +24,8 @@ function ServiceMap() {
 
   return (
     <>
-    <div className='flex flex-wrap'>
+    <h2 className="italic pb-4 text-2xl font-bold ">Nos Services :</h2>
+    <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>  
     {servicesData.map((service) => (
         <a href={`/patients/${service.name}`} key={service.id}>
             <div className='flex justify-center p-2'>

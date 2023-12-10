@@ -20,6 +20,8 @@ const Login = () => {
       const { role } = response.data;
       localStorage.setItem('accessToken', token);
       localStorage.setItem('role', role);
+      localStorage.setItem('email',email);
+      localStorage.setItem('password',password);
 
       if(role === "patient"){
         navigate('/home');
