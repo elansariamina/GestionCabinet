@@ -12,7 +12,7 @@ function MedecinCard({doctor}) {
             <span class="flex items-center border rounded-full w-36 pr-2 justify-center mx-auto mt-2 mb-2"><div class="bg-green-400 rounded-full w-2.5 h-2.5 block mr-2"></div>{doctor.phoneNumber}</span>
             <span class="flex items-center border rounded-full w-52 pr-2 justify-center mx-auto mt-2 mb-2"><div class="bg-pink-400 rounded-full w-2.5 h-2.5 block mr-2"></div>{doctor.email}</span>
             <span class="flex items-center border rounded-full w-48 pr-2 justify-center mx-auto mt-2 mb-2"><div class="bg-yellow-400 rounded-full w-2.5 h-2.5 block mr-2"></div>{doctor.address}</span>
-            <a href="/appointment"><button class="rounded-lg bg-gradient-to-r bg-blue-400 text-lg text-white font-bold pt-2 pb-2 px-4 inline">Prendre RDV</button></a>
+            <a href={"/appointment/"+doctor._id}><button class="rounded-lg bg-gradient-to-r bg-blue-400 text-lg text-white font-bold pt-2 pb-2 px-4 inline">Prendre RDV</button></a>
         </div>
     </div>
     </>
