@@ -6,25 +6,25 @@ import AddRdVpopUp from "./AddRDVpop-up";
 import axios from 'axios';
 import Alerts from "./Alerts";
 
-
 const RDVListCard = ({ time, date }) => {
     const { id_med } = useParams();
-    const rdvs = RDVList();
+    const rdvs = RDVList()
     const [rdv, setRdv] = useState(rdvs);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const id_p = '6571f2fe15acf1c8e29f4f68';
+    const id_p = localStorage.getItem('id_p');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-    const [hasAppointment, setHasAppointment] = useState(true);
-
-    useEffect(() => {
-        setHasAppointment(rdv.some((app) => app.id_medecin === id_med && app.id_patient === id_p));
-    }, [rdv, id_med, id_p, hasAppointment]);
+    const [hasAppointment, setHasAppointment] = useState(false);
+    const token = localStorage.getItem('accessToken');
 
     useEffect(() => {
         const fetchRdv = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/api/rdv?id_med=${id_med}`);
+                const response = await axios.get('http://localhost:3001/api/rdv', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setRdv(response.data);
                 setError('');
             } catch (error) {
@@ -33,7 +33,7 @@ const RDVListCard = ({ time, date }) => {
         };
 
         fetchRdv();
-    }, [id_med]);
+    }, [id_med, token]);
 
     const openPopup = () => {
         if (hasAppointment) {
@@ -54,6 +54,10 @@ const RDVListCard = ({ time, date }) => {
                 time: data.time,
                 id_patient: id_p,
                 id_medecin: id_med,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             setRdv((prevRdv) => {

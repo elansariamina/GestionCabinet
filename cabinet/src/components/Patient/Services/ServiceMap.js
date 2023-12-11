@@ -15,7 +15,7 @@ function ServiceMap() {
     })
     .then(response => {
         setServicesData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
     })
     .catch(error => {
       console.error("Error: ", error);

@@ -3,11 +3,15 @@ import axios from 'axios';
 
 const RDVList = () => {
     const [rdvList, setRdvList] = useState([]);
+    const token = localStorage.getItem('accessToken');
 
-    const apiUrl = 'http://localhost:3001/api/rdv';
 
     useEffect(() => {
-        axios.get(apiUrl)
+        axios.get('http://localhost:3001/api/rdv', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
             .then(response => {
                 setRdvList(response.data);
             })
