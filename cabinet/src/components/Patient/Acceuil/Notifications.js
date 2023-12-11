@@ -1,37 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 function Notifications() {
   const storedAppointments = localStorage.getItem('appointments');
-  const parsedAppointments = JSON.parse(storedAppointments) || [];
+  const parsedAppointments = useMemo(() => JSON.parse(storedAppointments) || [], [storedAppointments]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState(() => {
-    const storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
-    return storedNotifications;
-  });
-  const handleToggleNotifications = () => {
-    setShowNotifications(!showNotifications);
-  };
+  const [notifications, setNotifications] = useState([]);
+  const isInitialRender = useRef(true);
 
-  const generateNotifications = () => {
+  const generateNotifications = (appointments) => {
     try {
       const currentDate = new Date();
       const sevenDaysFromNow = new Date();
       sevenDaysFromNow.setDate(currentDate.getDate() + 7);
 
-      const upcomingAppointments = parsedAppointments.filter(appointment => {
+      const upcomingAppointments = appointments.filter(appointment => {
         const appointmentDate = new Date(appointment.date);
         return appointmentDate >= currentDate && appointmentDate <= sevenDaysFromNow;
       });
 
       const newNotifications = upcomingAppointments.map(appointment => ({
-        message: `Veuillez completer votre dossier avec le dr.${appointment.doctorName} a ${appointment.date} / ${appointment.time} si vous avez des analyses a ajouter`,
+        message: `Veuillez compléter votre dossier avec le ${appointment.doctorName} le ${appointment.date} à ${appointment.time} si vous avez des analyses à ajouter.`,
       }));
 
-      setNotifications(newNotifications);
-      localStorage.setItem('notifications', JSON.stringify(newNotifications));
+      return newNotifications;
     } catch (error) {
       console.error('Error generating notifications:', error);
+      return [];
     }
+  };
+
+  useEffect(() => {
+    const storedNotifications = localStorage.getItem('notifications');
+
+    if (storedNotifications && !isInitialRender.current) {
+      setNotifications(JSON.parse(storedNotifications));
+    } else {
+      const newNotifications = generateNotifications(parsedAppointments);
+      setNotifications(newNotifications);
+      localStorage.setItem('notifications', JSON.stringify(newNotifications));
+    }
+  }, [parsedAppointments]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [notifications]);
+
+  useEffect(() => {
+    isInitialRender.current = false;
+  }, []);
+
+  const handleToggleNotifications = () => {
+    setShowNotifications(!showNotifications);
   };
 
   const handleRemoveNotification = (index) => {
@@ -40,15 +67,6 @@ function Notifications() {
     setNotifications(updatedNotifications);
     localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
   };
-
-  useEffect(() => {
-    generateNotifications();
-  }, [parsedAppointments]);
-
-  useEffect(() => {
-    localStorage.setItem('notifications', JSON.stringify(notifications));
-  }, [notifications]);
-
   return (
     <div className="fixed bottom-6 right-6">
       <div className="relative inline-flex w-fit">
@@ -59,7 +77,7 @@ function Notifications() {
           {showNotifications ? null : (
             <div className="absolute bottom-auto left-0 right-auto top-0 z-10 inline-block -translate-x-2/4 -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 rounded-full bg-pink-700 p-2.5 text-xs">
               <div className="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 bg-pink-700 whitespace-nowrap rounded-full bg-indigo-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white">
-                {notifications.length > 99 ? '99+' : notifications.length}
+                { JSON.parse(localStorage.getItem("notifications")).length > 99 ? '99+' : JSON.parse(localStorage.getItem("notifications")).length}
               </div>
             </div>
           )}
@@ -81,8 +99,10 @@ function Notifications() {
         {showNotifications && (
           <div className="absolute bottom-12 right-0 w-80 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
             <div className="py-2 px-4">
-            {notifications.length === 0 ? (
-                <div className="italic text-center text-gray-500">Pas de notification à ce moment, veuillez revenir plus tard.</div>
+              {notifications.length === 0 ? (
+                <div className="italic text-center text-gray-500">
+                  Pas de notification à ce moment, veuillez revenir plus tard.
+                </div>
               ) : (
                 notifications.map((notification, index) => (
                   <div key={index} className="flex justify-between items-center py-2 px-4">
