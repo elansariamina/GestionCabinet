@@ -5,9 +5,14 @@ import axios from 'axios';
 
 function ServiceMap() {
   const [servicesData, setServicesData] = useState([]);
+  const token = localStorage.getItem('accessToken'); 
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/services")
+    axios.get("http://localhost:3001/api/services", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
         setServicesData(response.data);
         console.log(response.data);
