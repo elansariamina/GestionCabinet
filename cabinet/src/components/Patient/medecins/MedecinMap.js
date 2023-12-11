@@ -12,7 +12,7 @@ function MedecinMap() {
       axios.get("http://localhost:3001/api/doctors")
       .then(response => {
           setDoctorsData(response.data);
-          console.log(response.data);
+          // console.log(response.data);
       })
       .catch(error => {
         console.error("Error: ", error);
