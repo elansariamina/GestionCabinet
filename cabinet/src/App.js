@@ -11,11 +11,10 @@ function App() {
     <div>
       <Router>
         <Routes>
+          <Route path="/appointment/:id_med" element={<Appointment />} />
           <Route path="/" element={<Login />} /> 
           <Route path="/register" element={<Register />} /> 
           <Route path="/home" element={<Patients />} />
-          <Route path="/appointment" element={<Appointment />} />
-          {/*<Route path="/patients/:id" element={<Medecins />} />*/}
           <Route path="/patients/:name" element={<Medecins />} />
         </Routes>
       </Router>
