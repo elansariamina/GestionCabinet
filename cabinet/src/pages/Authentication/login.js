@@ -23,13 +23,16 @@ const Login = () => {
       localStorage.setItem('role', role);
       localStorage.setItem('email',email);
       localStorage.setItem('password',password);
-      localStorage.setItem('id_p',response.data.patient._id)
+      
 
 
       if(role === "patient"){
+        localStorage.setItem('id_p',response.data.patient._id)
         navigate('/home');
-      } else {
-        navigate('/');
+      } else if(role === "doctor"){
+        const { doctor } = response.data;
+        localStorage.setItem('doctor',JSON.stringify(doctor));
+        navigate('/doctorAppointments');
       }
 
     } catch (error) {
