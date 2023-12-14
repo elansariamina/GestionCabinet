@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import RdVcard from "./RDVcard";
+import AddRdVpopUp from "./AddRDVpop-up";
 
 
 const Scheduler = () => {
 
 
-    const  times =["8:30","9:30","10:30","11:30","12:30","14:30","15:30","16:30","17:30"]
+    const  times =["08:30","09:30","10:30","11:30","12:30","14:30","15:30","16:30","17:30"]
     const [currentMonth, setCurrentMonth] = useState(new Date());
     let isPassed=false;
     let isPastDay=false;
+
     useEffect(() => {
          isPassed=false;
          isPastDay=false;
@@ -87,7 +89,9 @@ const Scheduler = () => {
                                                     key={time}
                                                     time={formattedTime}
                                                     date={date}
+
                                                 />
+
                                             );
                                         })
                                     ) : null}
