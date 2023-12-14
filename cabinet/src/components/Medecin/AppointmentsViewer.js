@@ -5,12 +5,12 @@ import PatientInfo from './PatientInfo';
 const AppointmentsViewer = () => {
   const [appointments, setAppointments] = useState([]);
   const [currentAppointmentIndex, setCurrentAppointmentIndex] = useState(0);
+  const doctor = JSON.parse(localStorage.getItem('doctor'));
+  const accessToken = localStorage.getItem('accessToken');
+
 
   const fetchDoctorAppointments = async () => {
-    try {
-      const doctor = JSON.parse(localStorage.getItem('doctor'));
-      const accessToken = localStorage.getItem('accessToken');
-
+    try {      
       const response = await axios.get(`http://localhost:3001/api/doctors/getDoctorAppointments/${doctor._id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -55,17 +55,10 @@ const AppointmentsViewer = () => {
           Numéro de consultation courante {currentAppointmentIndex + 1}
         </button>
       </div>
-      {appointment && (
-        <div className="bg-white p-6 rounded shadow-md mb-4">
-          <h2 className="text-xl font-bold mb-4">Appointment</h2>
-          <p>
-            <span className="font-bold">Date:</span> {appointment.date}
-          </p>
-          <p>
-            <span className="font-bold">Time:</span> {appointment.time}
-          </p>
-        </div>
-      )}
+
+      {/* patient informatio */}
+      <PatientInfo patientId={appointment?.id_patient}  accessToken={accessToken}/>
+
       <div className="flex justify-between">
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handlePreviousAppointment}>
           Précédente
