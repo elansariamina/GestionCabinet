@@ -21,7 +21,10 @@ const Login = () => {
 
       localStorage.setItem('accessToken', token);
       localStorage.setItem('role', role);
+      localStorage.setItem('email',email);
+      localStorage.setItem('password',password);
       localStorage.setItem('id_p',response.data.patient._id)
+
 
       if(role === "patient"){
         navigate('/home');
