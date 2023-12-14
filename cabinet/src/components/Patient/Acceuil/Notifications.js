@@ -31,15 +31,16 @@ function Notifications() {
 
   useEffect(() => {
     const storedNotifications = localStorage.getItem('notifications');
-
+    
     if (storedNotifications && !isInitialRender.current) {
-      setNotifications(JSON.parse(storedNotifications));
+      setNotifications(JSON.parse(storedNotifications) || []);
     } else {
       const newNotifications = generateNotifications(parsedAppointments);
       setNotifications(newNotifications);
       localStorage.setItem('notifications', JSON.stringify(newNotifications));
     }
   }, [parsedAppointments]);
+  
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -77,7 +78,7 @@ function Notifications() {
           {showNotifications ? null : (
             <div className="absolute bottom-auto left-0 right-auto top-0 z-10 inline-block -translate-x-2/4 -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 rounded-full bg-pink-700 p-2.5 text-xs">
               <div className="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 bg-pink-700 whitespace-nowrap rounded-full bg-indigo-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white">
-                { JSON.parse(localStorage.getItem("notifications")).length > 99 ? '99+' : JSON.parse(localStorage.getItem("notifications")).length}
+              { JSON.parse(localStorage.getItem("notifications"))?.length > 99 ? '99+' : (JSON.parse(localStorage.getItem("notifications")) || []).length}
               </div>
             </div>
           )}
@@ -97,33 +98,33 @@ function Notifications() {
           </div>
         </div>
         {showNotifications && (
-          <div className="absolute bottom-12 right-0 w-80 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-            <div className="py-2 px-4">
-              {notifications.length === 0 ? (
-                <div className="italic text-center text-gray-500">
-                  Pas de notification à ce moment, veuillez revenir plus tard.
-                </div>
-              ) : (
-                notifications.map((notification, index) => (
-                  <div key={index} className="flex justify-between items-center py-2 px-4">
-                    <div className='italic'>{notification.message}</div>
-                    <div className="cursor-pointer" onClick={() => handleRemoveNotification(index)}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="h-5 w-5 text-red-500"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M14.85 6.35a.5.5 0 01.7.7L11.71 12l4.84 4.85a.5.5 0 01-.7.7L11 12.71 6.15 17.56a.5.5 0 11-.7-.7L10.29 12 5.15 7.15a.5.5 0 01.7-.7L11 11.29l4.85-4.84z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                ))
-              )}
+  <div className="absolute bottom-12 right-0 w-80 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+    <div className="py-2 px-4">
+      {notifications && notifications.length ? (
+        notifications.map((notification, index) => (
+          <div key={index} className="flex justify-between items-center py-2 px-4">
+            <div className='italic'>{notification.message}</div>
+            <div className="cursor-pointer" onClick={() => handleRemoveNotification(index)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-5 w-5 text-red-500"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14.85 6.35a.5.5 0 01.7.7L11.71 12l4.84 4.85a.5.5 0 01-.7.7L11 12.71 6.15 17.56a.5.5 0 11-.7-.7L10.29 12 5.15 7.15a.5.5 0 01.7-.7L11 11.29l4.85-4.84z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="italic text-center text-gray-500">
+          Pas de notification à ce moment, veuillez revenir plus tard.
+        </div>
+      )}
             </div>
           </div>
         )}
