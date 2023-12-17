@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PatientInfo from './PatientInfo';
+import AnalyseAndTraitement from './AnalyseAndTraitement';
 
 const AppointmentsViewer = () => {
   const [appointments, setAppointments] = useState([]);
@@ -46,6 +47,7 @@ const AppointmentsViewer = () => {
   const appointment = appointments[currentAppointmentIndex];
 
   return (
+    <>
     <div className="container mx-auto my-8 p-8 bg-gray-100 border rounded shadow-md">
       <div className="flex justify-between mb-4">
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
@@ -68,6 +70,8 @@ const AppointmentsViewer = () => {
         </button>
       </div>
     </div>
+    <AnalyseAndTraitement/>
+    </>
   );
 };
 
