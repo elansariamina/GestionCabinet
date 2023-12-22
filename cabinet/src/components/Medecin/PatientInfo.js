@@ -30,7 +30,7 @@ const PatientInfo = ({ patientId, accessToken }) => {
   return (
     <div>
       {patient && (
-        <div className="bg-white p-6 rounded shadow-md mb-4">
+        <div className='m-8 p-4 rounded-lg' style={{ boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.3)' }}>
           <h2 className="text-xl font-bold mb-4">Patient en cours</h2>
           <p>
             <span className="font-bold">Name:</span> {patient.name}
