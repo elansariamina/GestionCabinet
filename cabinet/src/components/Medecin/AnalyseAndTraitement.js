@@ -4,6 +4,7 @@ import ListAnalyses from './ListAnalyses';
 import jsPDF from 'jspdf';
 import axios from 'axios';
 
+
 function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
     const [checkedOptions, setCheckedOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([
@@ -79,26 +80,26 @@ function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
           pdf.text(` - ${option} `, 20, 20 + (10 * index));
         });
         
-//        pdf.save('analyses.pdf');
+        pdf.save('analyses.pdf');
 
-const pdfData = pdf.output('arraybuffer');
-const blob = new Blob([pdfData], { type: 'application/pdf' });
+        const pdfData = pdf.output('arraybuffer');
+        const blob = new Blob([pdfData], { type: 'application/pdf' });
 
-const formData = new FormData();
-formData.append('patientId', patientId);
-formData.append('doctorId', doctorId);
-formData.append('type', 'analyse');
-formData.append('file', blob, 'analyses.pdf');
+        const formData = new FormData();
+        formData.append('patientId', patientId);
+        formData.append('doctorId', doctorId);
+        formData.append('type', 'analyse');
+        formData.append('file', blob, 'analyses.pdf');
 
-try {
-  const response = await axios.post('http://localhost:3001/api/doctors/storeMedicalDoc', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+        try {
+          const response = await axios.post('http://localhost:3001/api/doctors/storeMedicalDoc', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
 
-  console.log('Response:', response.data);
+          console.log('Response:', response.data);
 
         } catch (error) {
           console.error('Error storing PDF on the server:', error);
@@ -107,13 +108,37 @@ try {
       };
       
 
-      const generateOrdonancePDF = () => {
+      const generateOrdonancePDF = async () => {
         const pdf = new jsPDF();
         pdf.text(`Ordonance`, 10,10);
         selectedOptions.forEach((row,index )=>{
             pdf.text(`- ${row.name}      ${row.fois} fois/jour     ${row.period}`, 20, 20 + (10 * index));
         });
         pdf.save(`ordonnance.pdf`);
+
+        const pdfData = pdf.output('arraybuffer');
+        const blob = new Blob([pdfData], { type: 'application/pdf' });
+
+        const formData = new FormData();
+        formData.append('patientId', patientId);
+        formData.append('doctorId', doctorId);
+        formData.append('type', 'ordonnance');
+        formData.append('file', blob, 'ordonnance.pdf');
+
+        try {
+          const response = await axios.post('http://localhost:3001/api/doctors/storeMedicalDoc', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          console.log('Response:', response.data);
+
+        } catch (error) {
+          console.error('Error storing PDF on the server:', error);
+        }
+        
       }
 
   return (
