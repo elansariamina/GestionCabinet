@@ -6,9 +6,9 @@ import AnalyseAndTraitement from './AnalyseAndTraitement';
 const AppointmentsViewer = () => {
   const [appointments, setAppointments] = useState([]);
   const [currentAppointmentIndex, setCurrentAppointmentIndex] = useState(0);
+  const [keyForRerender, setKeyForRerender] = useState(0);
   const doctor = JSON.parse(localStorage.getItem('doctor'));
   const accessToken = localStorage.getItem('accessToken');
-
 
   const fetchDoctorAppointments = async () => {
     try {      
@@ -35,12 +35,14 @@ const AppointmentsViewer = () => {
   const handleNextAppointment = () => {
     if (currentAppointmentIndex < appointments.length - 1) {
       setCurrentAppointmentIndex(currentAppointmentIndex + 1);
+      setKeyForRerender((prevKey) => prevKey + 1); 
     }
   };
 
   const handlePreviousAppointment = () => {
     if (currentAppointmentIndex > 0) {
       setCurrentAppointmentIndex(currentAppointmentIndex - 1);
+      setKeyForRerender((prevKey) => prevKey + 1); 
     }
   };
 
@@ -48,29 +50,30 @@ const AppointmentsViewer = () => {
 
   return (
     <>
-    <div className="container mx-auto my-8 p-8 bg-gray-100 border rounded shadow-md">
-      <div className="flex justify-between mb-4">
-        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
-          Nombre total de consultations {appointments.length}
-        </button>
-        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
-          Numéro de consultation courante {currentAppointmentIndex + 1}
-        </button>
-      </div>
+      <div className="container mx-auto my-8 p-8 border rounded shadow-md">
+        <div className="flex justify-between mb-4">
+          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
+            Nombre total de consultations {appointments.length}
+          </button>
+          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
+            Numéro de consultation courante {currentAppointmentIndex + 1}
+          </button>
+        </div>
 
-      {/* patient informatio */}
-      <PatientInfo patientId={appointment?.id_patient}  accessToken={accessToken}/>
-
-      <div className="flex justify-between">
-        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handlePreviousAppointment}>
-          Précédente
-        </button>
-        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handleNextAppointment}>
-          Suivante
-        </button>
+        {/* patient information */}
+        <PatientInfo patientId={appointment?.id_patient}  accessToken={accessToken}/>
+        
+        <AnalyseAndTraitement key={keyForRerender} patientId={appointment?.id_patient}  accessToken={accessToken} doctorId={appointment?.id_medecin}/>
+        
+        <div className="flex justify-between">
+          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handlePreviousAppointment}>
+            Précédente
+          </button>
+          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handleNextAppointment}>
+            Suivante
+          </button>
+        </div>
       </div>
-    </div>
-    <AnalyseAndTraitement/>
     </>
   );
 };
