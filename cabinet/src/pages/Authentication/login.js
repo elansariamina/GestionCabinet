@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -6,7 +6,8 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  
+  const [error,setError] = useState("")
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -18,6 +19,7 @@ const Login = () => {
 
       const { token } = response.data;
       const { role } = response.data;
+
 
       localStorage.setItem('accessToken', token);
       localStorage.setItem('role', role);
@@ -37,8 +39,10 @@ const Login = () => {
 
     } catch (error) {
       console.error('Login failed:', error);
+      setError(error.response.data.error)
     }
   };
+
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -76,6 +80,7 @@ const Login = () => {
             Login
           </button>
         </form>
+        <p>{error}</p>
       </div>
     </div>
   );
