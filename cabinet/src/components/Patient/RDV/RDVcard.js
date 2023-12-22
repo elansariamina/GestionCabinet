@@ -14,7 +14,7 @@ const RDVListCard = ({ time, date }) => {
     const id_p = localStorage.getItem('id_p');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-    const [hasAppointment, setHasAppointment] = useState(false);
+    const [hasAppointment, setHasAppointment] = useState(true);
     const token = localStorage.getItem('accessToken');
 
     useEffect(() => {

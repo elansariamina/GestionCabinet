@@ -5,7 +5,6 @@ import Patients from './pages/Patient/Patients';
 import Medecins from './pages/Patient/Medecins';
 import Appointment from "./pages/Patient/Appointment";
 import AssociatedRapports from './pages/Patient/AssociatedRapports';
-import Rapports from './pages/Patient/Rapports';
 import Register from './pages/Authentication/Register';
 
 
