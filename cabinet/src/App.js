@@ -6,6 +6,7 @@ import Medecins from './pages/Patient/Medecins';
 import Appointment from "./pages/Patient/Appointment";
 import AssociatedRapports from './pages/Patient/AssociatedRapports';
 import Register from './pages/Authentication/Register';
+import AppointmentsViewer from './components/Medecin/AppointmentsViewer';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/home" element={<Patients />} />
           <Route path="/patients/:name" element={<Medecins />} />
           <Route path='/rapports/' element={<AssociatedRapports/>} />
+          <Route path='/doctorAppointments' element={<AppointmentsViewer/>} />
         </Routes>
       </Router>
     </div>
