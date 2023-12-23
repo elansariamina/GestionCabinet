@@ -60,11 +60,14 @@ const AppointmentsViewer = () => {
           </button>
         </div>
 
-        {/* patient information */}
-        <PatientInfo patientId={appointment?.id_patient}  accessToken={accessToken}/>
-        
-        <AnalyseAndTraitement key={keyForRerender} patientId={appointment?.id_patient}  accessToken={accessToken} doctorId={appointment?.id_medecin}/>
-        
+        {appointments.length > 0 && (
+    
+          <>
+            <PatientInfo patientId={appointment?.id_patient} accessToken={accessToken} />
+            <AnalyseAndTraitement key={keyForRerender} patientId={appointment?.id_patient} accessToken={accessToken} doctorId={appointment?.id_medecin} />
+          </>
+        )}
+
         <div className="flex justify-between">
           <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handlePreviousAppointment}>
             Précédente
