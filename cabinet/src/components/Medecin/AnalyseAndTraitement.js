@@ -102,7 +102,6 @@ function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
 
         pdf.addImage(cachet, 'JPG', 150 , 80 + (12 * checkedOptions.length) + 10, 40, 40);
 
-        // Add a footer with information
         const currentDate = new Date().toLocaleDateString();
         pdf.text(`Doctor: ${JSON.parse(localStorage.getItem('doctor')).name} | Date: ${currentDate}`, 10, pdf.internal.pageSize.height - 10);
 
@@ -135,12 +134,39 @@ function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
       
 
       const generateOrdonancePDF = async () => {
+        
         const pdf = new jsPDF();
-        pdf.text(`Ordonance`, 10,10);
+        
+        pdf.setFillColor(72, 78, 94); 
+        pdf.setTextColor(255, 255, 255);
+        pdf.rect(0, 0, pdf.internal.pageSize.width, 20, 'F');
+        pdf.setFontSize(24);
+        pdf.setFont('helvetica');
+        pdf.text('Ordonnance', 10, 15);
+
+        pdf.setFontSize(16);
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont('helvetica');
+
+        pdf.text('Cabinet el-AMAL', 30, 30);
+        pdf.text('0643651756', 30, 40);
+        pdf.text('email@assistant.ma', 30, 50);
+        pdf.addImage(logoImage, 'JPG', 150, 20, 40, 40, 30);
+
+        pdf.setFontSize(14);
+
+        
         selectedOptions.forEach((row,index )=>{
-            pdf.text(`- ${row.name}      ${row.fois} fois/jour     ${row.period}`, 20, 20 + (10 * index));
+            pdf.text(`- ${row.name}      ${row.fois} fois/jour     ${row.period}`, 30, 80 + (12 * index));
         });
+
+        pdf.addImage(cachet, 'JPG', 150 , 100 + (12 * selectedOptions.length) + 10, 40, 40);
+
+        const currentDate = new Date().toLocaleDateString();
+        pdf.text(`Doctor: ${JSON.parse(localStorage.getItem('doctor')).name} | Date: ${currentDate}`, 10, pdf.internal.pageSize.height - 10);
+
         pdf.save(`ordonnance.pdf`);
+
 
         const pdfData = pdf.output('arraybuffer');
         const blob = new Blob([pdfData], { type: 'application/pdf' });
