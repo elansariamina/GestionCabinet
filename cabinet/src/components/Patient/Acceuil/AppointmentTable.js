@@ -1,7 +1,6 @@
 import React from 'react';
 
 const AppointmentTable = ({ data }) => {
-    console.log(data)
     return (
             <div className='w-2/3 p-4'>
                 <h2 className='text-white text-lg font-bold mb-4 font-pacifico text-center bg-cyan-700 rounded-t border-white border-1'>Prochain rendez-vous:</h2>
