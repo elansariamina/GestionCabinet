@@ -36,6 +36,10 @@ const Login = () => {
         const { doctor } = response.data;
         localStorage.setItem('doctor', JSON.stringify(doctor));
         navigate('/doctorAppointments');
+      } else if (role === 'assistant') {
+        const { assistant } = response.data;
+        localStorage.setItem('assistant', JSON.stringify(assistant));
+        navigate('/assistant');
       }
     } catch (error) {
       console.error('Login failed:', error);
