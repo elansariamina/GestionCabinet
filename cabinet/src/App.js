@@ -8,6 +8,7 @@ import AssociatedRapports from './components/Patient/AssociatedFiles/AssociatedR
 import Register from './pages/Authentication/Register';
 import AppointmentsViewer from './components/Medecin/AppointmentsViewer';
 import Rapports from "./pages/Patient/Rapports";
+import Assistant from "./components/Assistant/Assistant";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/patients/:name" element={<Medecins />} />
           <Route path='/rapports' element={<Rapports/>} />
           <Route path='/doctorAppointments' element={<AppointmentsViewer/>} />
+          <Route path='/assistant' element={<Assistant/>} />
         </Routes>
       </Router>
     </div>
