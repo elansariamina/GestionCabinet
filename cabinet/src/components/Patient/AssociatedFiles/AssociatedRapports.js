@@ -19,6 +19,7 @@ function AssociatedRapports() {
     const location = useLocation();
     const [requestData,setRD]=useState({})
     const token = localStorage.getItem('accessToken');
+    const patient = JSON.parse(localStorage.getItem('patient'));
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
 
@@ -87,7 +88,7 @@ function AssociatedRapports() {
     const saveData = async () => {
         try {
             const reportAnalyse = {
-                id_patient: requestData.id_patient,
+                id_patient: patient._id,
                 id_medecin: requestData.id_med,
                 date: requestData.date,
                 time: requestData.time,
@@ -96,7 +97,7 @@ function AssociatedRapports() {
             };
 
             const reportScan = {
-                id_patient: requestData.id_patient,
+                id_patient: patient._id,
                 id_medecin: requestData.id_med,
                 date: requestData.date,
                 time: requestData.time,

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import axios from "axios";
 
-const DocPopUp = ({ onclose,type }) => {
+const DossierPopUp = ({onclose}) => {
     const token = localStorage.getItem('accessToken');
     const patient = JSON.parse(localStorage.getItem('patient'));
     const [documents, setDocuments] = useState([]);
@@ -9,16 +9,13 @@ const DocPopUp = ({ onclose,type }) => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:3001/api/doctors/medDoc/${patient._id}`, {
+            .get(`http://localhost:3001/api/rapports/nullContent/${patient._id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((response) => {
-                const doc = response.data;
-                const newestDocument = doc
-                    .filter(item => item.type === type);
-                setDocuments(newestDocument);
+                setDocuments(response.data);
                 setLoading(false);
             })
             .catch((error) => {
@@ -27,15 +24,6 @@ const DocPopUp = ({ onclose,type }) => {
             });
     }, [patient._id, documents]);
 
-    const downloadFile = (document) => {
-        const { content, date } = document;
-        const fileName = `${type}_${new Date(date).toLocaleDateString()}.pdf`;
-        const blob = new Blob([new Uint8Array(content.data)], { type: 'application/pdf' });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileName;
-        link.click();
-    };
 
     return (
         <div>
@@ -66,7 +54,7 @@ const DocPopUp = ({ onclose,type }) => {
                             />
                         </svg>
                     </button>
-                    <h2 className="text-2xl font-pacifico mb-7 text-blue-900 text-center">Vos {type}s: </h2>
+                    <h2 className="text-2xl font-pacifico mb-7 text-blue-900 text-center">Vos Dossiers Incomplets: </h2>
 
                     {loading ? (
                         <p className="font-pacifico">En cours de traitement ...</p>
@@ -77,6 +65,7 @@ const DocPopUp = ({ onclose,type }) => {
                                 <th className="text-#26a7cc font-pacifico p-3">Date</th>
                                 <th className="text-#26a7cc font-pacifico p-3">Heure</th>
                                 <th className="text-#26a7cc font-pacifico p-3">Médecin</th>
+                                <th className="text-#26a7cc font-pacifico p-3">Type</th>
                                 <th className="text-#26a7cc font-pacifico p-3"></th>
                             </tr>
                             </thead>
@@ -90,14 +79,17 @@ const DocPopUp = ({ onclose,type }) => {
                                         {new Date(document.date).toLocaleTimeString()}
                                     </td>
                                     <td className="text-center text-blue-950 font-comicSans p-3">
-                                        {document.doctorId.name}
+                                        {document.id_medecin.name}
+                                    </td>
+                                    <td className="text-center text-blue-950 font-comicSans p-3">
+                                        {document.type}
                                     </td>
                                     <td className="text-center">
                                         <button
-                                            onClick={() => downloadFile(document)}
+
                                             className="hover:bg-cyan-100 text-blue-900 font-comicSans py-1 px-2 rounded"
                                         >
-                                            Télécharger
+                                            Completer
                                         </button>
                                     </td>
                                 </tr>
@@ -105,7 +97,7 @@ const DocPopUp = ({ onclose,type }) => {
                             </tbody>
                         </table>
                     ) : (
-                        <p>Aucun {type} trouvé.</p>
+                        <p>Aucun dossier incomplet trouvé.</p>
                     )}
                 </div>
             </div>
@@ -113,4 +105,5 @@ const DocPopUp = ({ onclose,type }) => {
     );
 };
 
-export default DocPopUp;
+
+export default DossierPopUp;
