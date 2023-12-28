@@ -1,59 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState,  useEffect } from 'react';
 import ListMedecaments from './ListMedecaments';
 import ListAnalyses from './ListAnalyses';
 import jsPDF from 'jspdf';
 import axios from 'axios';
 import cachet from '../../assets/images/cachet.jpg';
 import logoImage from '../../assets/images/logo.jpg';
+import DoctorPopup from './DoctorPopup';
 
 
 function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
-    const [checkedOptions, setCheckedOptions] = useState([]);
-    const [selectedOptions, setSelectedOptions] = useState([
-        {
-            name: '',
-            fois: '',
-            period: '',
-          },
-    ])
-    const [rows, setRows] = useState([
-        {
-          selectedMedicament: null,
-          foisOptions: [],
-          periodeOptions: [],
-        },
-      ]);
+  const [sexe, setSexe] = useState('');
+  const [statut, setStatut] = useState('');
+  const [medicament, setMedicament] = useState('');
+  const [maladie, setMaladie] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [message, setMessage] = useState('');
+  const [checkedOptions, setCheckedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([
+    {
+      name: '',
+      fois: '',
+      period: '',
+    },
+  ])
+  const [rows, setRows] = useState([
+    {
+      selectedMedicament: null,
+      foisOptions: [],
+      periodeOptions: [],
+    },
+  ]);
     
-      const handleMedicamentChange = (medicamentName, rowIndex) => {
-        const selectedMedication = ListMedecaments.find((med) =>
-          med.medicaments.some((medication) => {if(medication.name === medicamentName) {
-            setSelectedOptions((prevSelectedOptions) => {
-                const newOptions = [...prevSelectedOptions];
-                newOptions[rowIndex] = {
-                    name: medication.name,
-                    fois: medication.fois,
-                    period: medication.periode,
-                };
-                return newOptions;
-            })
-            return true;
+    const handleMedicamentChange = (medicamentName, rowIndex) => {
+      setMedicament(medicamentName);
+      const selectedMedication = ListMedecaments.find((med) =>
+        med.medicaments.some((medication) => {if(medication.name === medicamentName) {
+          setSelectedOptions((prevSelectedOptions) => {
+            const newOptions = [...prevSelectedOptions];
+            newOptions[rowIndex] = {
+              name: medication.name,
+              fois: medication.fois,
+              period: medication.periode,
+            };
+            return newOptions;
+          })
+          return true;
         }})
-        );
+      );
     
-        setRows((prevRows) => {
-          const newRows = [...prevRows];
-          newRows[rowIndex] = {
-            selectedMedicament: selectedMedication,
-            foisOptions: Array.from(
-              new Set(selectedMedication.medicaments.map((medication) => medication.fois))
-            ),
-            periodeOptions: Array.from(
-              new Set(selectedMedication.medicaments.map((medication) => medication.periode))
-            ),
-          };
-          return newRows;
-        });
-      };
+      setRows((prevRows) => {
+        const newRows = [...prevRows];
+        newRows[rowIndex] = {
+          selectedMedicament: selectedMedication,
+          foisOptions: Array.from(
+            new Set(selectedMedication.medicaments.map((medication) => medication.fois))
+          ),
+          periodeOptions: Array.from(
+            new Set(selectedMedication.medicaments.map((medication) => medication.periode))
+          ),
+        };
+        return newRows;
+      });
+    };
     
       const addRow = () => {
         setRows((prevRows) => [
@@ -193,12 +201,81 @@ function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
         
       }
 
+      const handleRadioChange = (e) => {
+        if (e.target.name === 'sexe') {
+          setSexe(e.target.value);
+        } else if (e.target.name === 'statut') {
+          setStatut(e.target.value);
+        } else if (e.target.name === 'deja'){
+          setMaladie(e.target.value);
+        }
+      };
+    
+      useEffect(() => {
+        if (sexe === 'feminin' && statut === 'marie' && (medicament === 'dolicox 60mg' || medicament === 'cataflam 100mg')) {
+          setMessage("Ce médicament est un anti-inflammatoire, N'oubliez pas de poser la question s'elle est enceinte ou s'elle pense tomber enceinte dans les prochains 3 mois.")
+          setShowPopup(true);
+        }
+        if (maladie === 'cardiologie' && (medicament === 'dolicox 60mg' || medicament === 'cataflam 100mg')){
+          setMessage("Ce patient a déjà une maladie cardio, les anti-inflammatiores sont dangereux, essaie de lui donner des corticoides.");
+          setShowPopup(true);
+        }
+        if (maladie === 'endocrinologie' && (medicament === 'cortancyle 5mg' || medicament === 'cataflam 100mg')){
+          setMessage("Ce patient est diabétique, en donnant des corticoides(vous donnez de petites doses) n'oublie pas de lui demander d'augmenter les doses d'insuline ou de médicaments.");
+          setShowPopup(true);
+        }
+        let test = '';
+        checkedOptions.map((option, index)=> {
+          if(option === "IRM") test = option;
+        });
+        if (maladie === 'cardiologie' && test === 'IRM'){
+          setMessage("Les IRMs sont interdites pour les maladies cardiologiques!!!");
+          setShowPopup(true);
+        }
+      }, [sexe, statut, medicament, maladie, checkedOptions]);
+      
   return (
     <>
       <div>
-        
         <div className='m-8 p-4 rounded-lg' style={{ boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.3)' }}>
-          <h1 className="text-xl font-bold mb-4">Analyse</h1>
+          <h1 className="text-xl font-bold mb-4 font-dancingScript">Informations</h1>
+          <form>
+            <div className='flex m-4'>
+              <label className='flex flex-wrap mx-4'>
+                <span className='text-lg font-semibold text-gray-500'>Age:</span>
+                <input type='number' className='mx-6 border '/>
+              </label>
+              <label className='flex flex-wrap mx-4'>
+                    <span className='text-lg font-semibold text-gray-500'>Poids:</span>
+                    <input type='text' className='mx-6 border '/>
+              </label>
+            </div>
+            <div className='flex m-4'>
+              <label className='flex flex-wrap mx-4'>
+                <span className='text-lg font-semibold text-gray-500'>Sexe:</span>
+                <label><input name='sexe' type='radio' value="masculin" className='mx-2' onClick={handleRadioChange}/> Masculin</label>
+                <label><input name='sexe' type='radio' value="feminin" className='mx-2' onClick={handleRadioChange}/> Féminin</label>
+              </label>
+              <label className='flex flex-wrap mx-4 pl-12'>
+                    <span className='text-lg font-semibold text-gray-500'>Statut familial:</span>
+                    <label><input name='statut' type='radio' className='mx-2' onClick={handleRadioChange} /> Célibataire</label>
+                    <label><input name='statut' type='radio' value="marie" className='mx-2' onClick={handleRadioChange} /> Marié(e)</label>
+                    <label><input name='statut' type='radio' className='mx-2' onClick={handleRadioChange}/> Divorcé(e)</label>
+              </label>
+            </div>
+            <div className='flex m-4'>
+              <label className='flex flex-wrap mx-4'>
+                <span className='text-lg font-semibold text-gray-500'>Autres maladies:</span>
+                <label><input name='deja' type='radio' value="cardiologie" className='mx-2' onClick={handleRadioChange}/> Cardiologie</label>
+                <label><input name='deja' type='radio' value="rhumatologie" className='mx-2' onClick={handleRadioChange}/> Rhumatologie</label>
+                <label><input name='deja' type='radio' value="endocrinologie" className='mx-2' onClick={handleRadioChange}/> Endocrinologie</label>
+              </label>
+            </div>
+          </form>
+          
+        </div>
+        <div className='m-8 p-4 rounded-lg' style={{ boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.3)' }}>
+          <h1 className="text-xl font-bold mb-4 font-dancingScript">Analyse</h1>
           <form className='flex'>
             {ListAnalyses.map((category) => (
               <label key={category.category} className='flex flex-wrap mx-4'>
@@ -213,12 +290,12 @@ function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
             ))}
           </form>
           <div className='flex justify-end'>
-            <button className='bg-purple-300 rounded-lg font-semibold py-1 px-2 m-4 cursor-pointer' onClick={generateAnalysePDF}>Générer les analyses</button>
+            <button className='bg-white border-2 text-24b6e1 rounded-lg font-semibold py-1 px-2 m-4 cursor-pointer hover:shadow-lg' onClick={generateAnalysePDF}>Générer les analyses</button>
           </div>
         </div>
-
+        {showPopup && <DoctorPopup onClose={()=> setShowPopup(false)} message={message}/>}
         <div className='m-8 p-4 rounded-lg' style={{ boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.3)' }}>
-        <h1 className="text-xl font-bold mb-4">Traitement</h1>
+        <h1 className="text-xl font-bold mb-4 font-dancingScript">Traitement</h1>
         {rows.map((row, index) => (
             <form key={index} className='flex my-4'>
               <label className='mx-4'>
@@ -230,7 +307,7 @@ function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
                   <option hidden>Choisir un medicament</option>
                   {ListMedecaments.map((med) =>
                     med.medicaments.map((medication) => (
-                      <option key={medication.name}>{medication.name}</option>
+                      <option key={medication.name} value={medication.name}>{medication.name}</option>
                     ))
                   )}
                 </select>
@@ -259,7 +336,7 @@ function AnalyseAndTraitement({ patientId, accessToken, doctorId }) {
         ))}
         <button className='rounded-full bg-black text-white font-bold text-lg py-1 px-3 m-4' onClick={addRow}>+</button>
           <div className='flex justify-end'>
-            <button className='bg-purple-300 rounded-lg font-semibold py-1 px-2 m-4 cursor-pointer' onClick={generateOrdonancePDF}>Générer l'ordonnance</button>
+            <button className='bg-white border-2 text-24b6e1 rounded-lg font-semibold py-1 px-2 m-4 cursor-pointer hover:shadow-lg' onClick={generateOrdonancePDF}>Générer l'ordonnance</button>
           </div>
           </div>
         </div>

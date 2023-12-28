@@ -3,7 +3,7 @@ import React from 'react';
 const DocumentTable = ({ documents, title, downloadHandler }) => {
   return (
     <div className="w-1/2 p-4">
-      <h2 className="text-xl font-bold mb-4">{title}:</h2>
+      <h2 className="text-xl font-bold mb-4 font-pacifico">{title}:</h2>
       {documents.length > 0 ? (
         <table className="table-auto w-full text-#26a7cc">
           <tbody>
