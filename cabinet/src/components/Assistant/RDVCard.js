@@ -16,7 +16,6 @@ function RDVCard({ appointment }) {
             }); 
             setSuccessMessage('Appointment canceled successfully');
             setErrorMessage(''); 
-            //window.location.reload();
         }catch (error) {
           setErrorMessage('Failed to cancel appointment. Please try again.');
           setSuccessMessage('');
@@ -34,8 +33,8 @@ function RDVCard({ appointment }) {
             onClick={handleCancelAppointment}
             className='bg-red-600 hover:bg-red-800 text-white font-bold m-3 py-1 px-4 rounded'>
                 Annuler</button>
-      {errorMessage !== '' && <Alerts type={'error'} message={errorMessage} onClose={() => setErrorMessage('')} />}
-      {successMessage !== '' && <Alerts type={'success'} message={successMessage} onClose={() => setSuccessMessage('')} />}
+      {errorMessage !== '' && <Alerts type={'error'} message={errorMessage} onClose={() =>  { setErrorMessage(''); window.location.reload(); }} />}
+      {successMessage !== '' && <Alerts type={'success'} message={successMessage} onClose={() =>  { setSuccessMessage(''); window.location.reload(); }} />}
         </div>
     </div>
   );
