@@ -138,6 +138,7 @@ function AssociatedRapports() {
                 type: 'Analyse',
             };
 
+
             const reportScan = {
                 id_patient: requestData.id_patient,
                 id_medecin: requestData.id_med,

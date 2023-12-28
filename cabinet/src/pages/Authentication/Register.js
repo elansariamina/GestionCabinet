@@ -111,7 +111,7 @@ const Register = () => {
                     className="bg-blue-950 text-white py-2 px-4 rounded hover:bg-5ab1d0 "
                     type="submit"
                 >
-                  Register
+                  S'enregistrer
                 </button>
 
               </div>
