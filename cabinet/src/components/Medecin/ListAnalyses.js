@@ -37,5 +37,13 @@ export default [
             {"name":"Créatininurie"},
         ],
     },
+    {
+      "category":"Autres",
+      "options":[
+          {"name":"IRM"},
+          {"name":"Scans"},
+          {"name":"Radio"},
+      ],
+    },
   ]
   

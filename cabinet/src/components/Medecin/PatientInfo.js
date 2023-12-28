@@ -96,10 +96,11 @@ const PatientInfo = ({ patientId, medecinId, accessToken }) => {
   }, [patientId]);
 
   return (
-    <div>
+    <div className=' '>
       {patient && (
         <div className='m-8 p-4 rounded-lg' style={{ boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.3)' }}>
-          <h2 className="text-xl font-bold mb-4">Patient en cours</h2>
+          <h2 className="text-xl font-bold mb-4 font-pacifico">Patient en cours</h2>
+          <div className='flex justify-between mx-8'>
           <p>
             <span className="font-bold">Name:</span> {patient.name}
           </p>
@@ -112,6 +113,7 @@ const PatientInfo = ({ patientId, medecinId, accessToken }) => {
           <p>
             <span className="font-bold">Email:</span> {patient.email}
           </p>
+          </div>
           <div className="flex">
             <DocumentTable
               documents={analyse}

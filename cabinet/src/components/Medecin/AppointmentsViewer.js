@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PatientInfo from './PatientInfo';
 import AnalyseAndTraitement from './AnalyseAndTraitement';
+import Header from '../allAppComp/Header';
+import Footer from '../allAppComp/Footer';
 
 const AppointmentsViewer = () => {
   const [appointments, setAppointments] = useState([]);
@@ -50,18 +52,18 @@ const AppointmentsViewer = () => {
 
   return (
     <>
+    <Header/>
       <div className="container mx-auto my-8 p-8 border rounded shadow-md">
         <div className="flex justify-between mb-4">
-          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
+          <button className="bg-24b6e1 font-pacifico text-white font-bold py-2 px-4 rounded">
             Nombre total de consultations {appointments.length}
           </button>
-          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
+          <button className="bg-24b6e1 font-pacifico text-white font-bold py-2 px-4 rounded">
             Numéro de consultation courante {currentAppointmentIndex + 1}
           </button>
         </div>
 
         {appointments.length > 0 && (
-    
           <>
             <PatientInfo patientId={appointment?.id_patient} medecinId={doctor._id} accessToken={accessToken} />
             <AnalyseAndTraitement key={keyForRerender} patientId={appointment?.id_patient} accessToken={accessToken} doctorId={appointment?.id_medecin} />
@@ -69,14 +71,15 @@ const AppointmentsViewer = () => {
         )}
 
         <div className="flex justify-between">
-          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handlePreviousAppointment}>
+          <button className="bg-24b6e1 text-white font-bold py-2 px-4 rounded" onClick={handlePreviousAppointment}>
             Précédente
           </button>
-          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={handleNextAppointment}>
+          <button className="bg-24b6e1 text-white font-bold py-2 px-4 rounded" onClick={handleNextAppointment}>
             Suivante
           </button>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };
