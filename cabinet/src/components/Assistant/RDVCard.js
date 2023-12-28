@@ -1,8 +1,10 @@
-import React from 'react';
+import React , {useState} from 'react';
 import axios from 'axios';
-
+import Alerts from '../Patient/RDV/Alerts';
 function RDVCard({ appointment }) {
     const accessToken = localStorage.getItem('accessToken');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
       const handleCancelAppointment = async () => {
         try {
@@ -12,9 +14,12 @@ function RDVCard({ appointment }) {
             }
 
             }); 
-            window.location.reload();
+            setSuccessMessage('Appointment canceled successfully');
+            setErrorMessage(''); 
+            //window.location.reload();
         }catch (error) {
-                console.error('Error:', error);
+          setErrorMessage('Failed to cancel appointment. Please try again.');
+          setSuccessMessage('');
               } }
     
     
@@ -29,6 +34,8 @@ function RDVCard({ appointment }) {
             onClick={handleCancelAppointment}
             className='bg-red-600 hover:bg-red-800 text-white font-bold m-3 py-1 px-4 rounded'>
                 Annuler</button>
+      {errorMessage !== '' && <Alerts type={'error'} message={errorMessage} onClose={() => setErrorMessage('')} />}
+      {successMessage !== '' && <Alerts type={'success'} message={successMessage} onClose={() => setSuccessMessage('')} />}
         </div>
     </div>
   );
