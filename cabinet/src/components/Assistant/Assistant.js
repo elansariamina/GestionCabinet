@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import RDVCard from './RDVCard';
 import ConfirmRDV from './ConfirmRDV';
+import RDVPopUp from './RDVPopUp';
 
 import Header from '../allAppComp/Header';
 import Footer from '../allAppComp/Footer';
@@ -17,6 +18,8 @@ const Assistant = () => {
   const [appointmentsToBeConfirmed, setAppointmentsToBeConfirmed] = useState([]);
   const [distinctPatientsCount, setDistinctPatientsCount] = useState(0);
   const accessToken = localStorage.getItem('accessToken');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); 
 
   const fetchDoctorsBySpe = async () => {
     try {
@@ -101,10 +104,20 @@ const Assistant = () => {
     fetchDistinctPatientsCountForDoctor(doctorIds);
   }, [doctors]);
 
+  const handleAddAppointment = () => {
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <>
       <Header />
       <div>
+      <button onClick={handleAddAppointment} className='bg-blue-900 hover:bg-blue-800 text-white font-bold ml-6 mr-12 mt-3  py-1 px-4 rounded float-right'>
+                Ajouter RDV</button>
         <div className="m-10 p-8 border rounded shadow-md">
           <div className="flex justify-between mb-4">
             <h1 className="text-xl font-bold mb-4">Liste RDVs d'aujourd'hui</h1>
@@ -164,6 +177,12 @@ const Assistant = () => {
         </div>
       </div>
       <Footer />
+      {showPopup && (
+        <RDVPopUp
+          onClose={handleClosePopup}
+          appointments={appointments}
+        />
+      )}
     </>
   );
 };
