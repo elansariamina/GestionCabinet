@@ -1,16 +1,23 @@
 import React from 'react';
-import Services from './Services';
-import RDVs from '../../components/Patient/Acceuil/RDVs';
-import Notifications from '../../components/Patient/Acceuil/Notifications';
+import Services from '../../components/Patient/Services/Services';
+import Header from "../../components/allAppComp/Header";
+import Footer from "../../components/allAppComp/Footer";
+import Greetings from "../../components/Patient/Acceuil/greetings";
+import GlobalComp from "../../components/Patient/Acceuil/GlobalComp";
+
 
 function Acceuil() {
-  return (
-    <div>
-      <Services />
-      <RDVs />
-      <Notifications />
-    </div>
-  );
+    return (
+        <div className='bg-24b6e1'>
+            <Header />
+            <Greetings />
+            <Services />
+            <GlobalComp/>
+            {/*<RDVs />*/}
+            {/*<Notifications />*/}
+            <Footer />
+        </div>
+    );
 }
 
 export default Acceuil;

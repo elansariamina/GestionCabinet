@@ -6,34 +6,63 @@ import AddRdVpopUp from "./AddRDVpop-up";
 import axios from 'axios';
 import Alerts from "./Alerts";
 
-const RDVListCard = ({ time, date }) => {
+const RDVListCard = ({ time, date,data }) => {
     const { id_med } = useParams();
     const rdvs = RDVList()
     const [rdv, setRdv] = useState(rdvs);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const id_p = localStorage.getItem('id_p');
+    const patient = JSON.parse(localStorage.getItem('patient'));
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-    const [hasAppointment, setHasAppointment] = useState(true);
+    const [hasAppointment, setHasAppointment] = useState(false);
     const token = localStorage.getItem('accessToken');
 
     useEffect(() => {
-        const fetchRdv = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/rdv', {
+                const response = await axios.get(`http://localhost:3001/api/rdv/doctor/${id_med}/patient/${patient._id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setRdv(response.data);
+
                 setError('');
+                if (response.data.length === 0) {
+                    setHasAppointment(false);
+                } else {
+                    setHasAppointment(true);
+                }
             } catch (error) {
-                setError('Une erreur est produite!');
+                // setError('Une erreur est produite!');
             }
         };
 
-        fetchRdv();
-    }, [id_med, token]);
+        fetchData();
+
+
+    }, [id_med, patient._id, token]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/api/rdv`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setError('');
+                    setRdv(response.data);
+
+            } catch (error) {
+                // setError('Une erreur est produite!');
+            }
+        };
+
+        fetchData();
+
+
+    }, [token]);
 
     const openPopup = () => {
         if (hasAppointment) {
@@ -52,7 +81,7 @@ const RDVListCard = ({ time, date }) => {
             const response = await axios.post('http://localhost:3001/api/rdv', {
                 date: data.date,
                 time: data.time,
-                id_patient: id_p,
+                id_patient:patient._id,
                 id_medecin: id_med,
             }, {
                 headers: {
@@ -68,7 +97,7 @@ const RDVListCard = ({ time, date }) => {
                 return newRdv;
             });
         } catch (error) {
-            setError('Une erreur est produite!');
+            // setError('Une erreur est produite!');
         }
     };
 
@@ -88,8 +117,8 @@ const RDVListCard = ({ time, date }) => {
     }, [id_med, time, date, rdv, isPopupOpen]);
 
     const cardStyle = rdv.some(app => app.id_medecin === id_med && app.time === time && format(new Date(app.date), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'))
-        ? 'event bg-red-400 text-white rounded p-1 text-sm mb-1 cursor-none'
-        : 'event bg-green-400 text-white rounded p-1 text-sm mb-1 cursor-pointer';
+        ? 'event bg-red-700 text-white rounded p-1 text-sm mb-1 cursor-none'
+        : 'event bg-green-500 text-white rounded p-1 text-sm mb-1 cursor-pointer';
 
     return (
         <div className={cardStyle}>
@@ -98,7 +127,7 @@ const RDVListCard = ({ time, date }) => {
                 <span>{time}</span>
             </button>
             {isPopupOpen && !rdv.some(app => app.id_medecin === id_med && app.time === time && format(new Date(app.date), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')) && (
-                <AddRdVpopUp onClose={closePopup} onSave={handleSave} date={date} time={time} />
+                <AddRdVpopUp onClose={closePopup} onSave={handleSave} date={date} time={time} data={data} />
             )}
             {error !== '' && <Alerts type={'error'} message={error} onClose={() => setError('')} />}
             {message !== '' && <Alerts type={'success'} message={message} onClose={() => setMessage('')} />}

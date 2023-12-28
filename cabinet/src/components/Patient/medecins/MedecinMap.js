@@ -24,17 +24,15 @@ function MedecinMap() {
       });
     }, [])
   return (
-    <div className='flex flex-wrap my-40'>
+    <div className='flex flex-wrap m-40'>
     {doctorsData.map((medecin,index) => (
-        medecin.spe === name && 
-        <a href={`/patients/${medecin.id}`} key={medecin.id}>
+        medecin.spe === name &&
             <div className='flex justify-center p-2'>
             <MedecinCard key={index} doctor={medecin}/>
-            </div> 
-        </a>
+            </div>
     ))}
 
-</div>
+    </div>
   )
 }
 

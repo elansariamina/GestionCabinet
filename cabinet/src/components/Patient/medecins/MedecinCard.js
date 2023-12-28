@@ -1,23 +1,37 @@
-import React from 'react'
-import Img from "./../../../assets/images/medecin.jpg";
+import React from 'react';
+import Img from './../../../assets/images/medecin.jpg';
+import { FaPhoneAlt } from 'react-icons/fa';
+import { MdOutlineEmail } from 'react-icons/md';
+import { FaLocationDot } from 'react-icons/fa6';
 
-function MedecinCard({doctor}) {
-  return (
-    <>
-    <div class="mx-10 grid place-content-center">
-        <div class="bg-white py-8 px-10 text-center rounded-lg shadow-lg transform -translate-y-20 sm:-translate-y-24 max-w-xs mx-auto">
-            <h2 class="font-semibold text-2xl mb-6">{doctor.name}</h2>
-            <img class="w-20 h-20 object-cover rounded-full mx-auto shadow-lg" src={Img} alt="User avatar"></img>
-            <p class="capitalize text-xl mt-1">{doctor.service}</p>
-            <span class="flex items-center border rounded-full w-36 pr-2 justify-center mx-auto mt-2 mb-2"><div class="bg-green-400 rounded-full w-2.5 h-2.5 block mr-2"></div>{doctor.phoneNumber}</span>
-            <span class="flex items-center border rounded-full w-52 pr-2 justify-center mx-auto mt-2 mb-2"><div class="bg-pink-400 rounded-full w-2.5 h-2.5 block mr-2"></div>{doctor.email}</span>
-            <span class="flex items-center border rounded-full w-48 pr-2 justify-center mx-auto mt-2 mb-2"><div class="bg-yellow-400 rounded-full w-2.5 h-2.5 block mr-2"></div>{doctor.address}</span>
-            <a href={"/appointment/"+doctor._id}><button class="rounded-lg bg-gradient-to-r bg-blue-400 text-lg text-white font-bold pt-2 pb-2 px-4 inline">Prendre RDV</button></a>
+function MedecinCard({ doctor }) {
+    return (
+        <div className=' grid place-content-center w-82'>
+            <div className='bg-gray-100 border-2 border-white rounded-2xl p-4 text-center shadow-lg transform -translate-y-20 sm:-translate-y-24 max-w-xs mx-auto'>
+                <h2 className='font-pacifico text-blue-900 text-2xl mb-6'>{doctor.name}</h2>
+                <p className='capitalize text-xl mt-1'>{doctor.service}</p>
+                <div className='text-#5ab1d0 font-comicSans'>
+          <span className='flex items-center mb-2'>
+            <FaPhoneAlt className='mr-2 text-cyan-700' />
+              {doctor.phoneNumber}
+          </span>
+                    <span className='flex items-center mb-2'>
+            <MdOutlineEmail className='mr-2 text-cyan-700' />
+                        {doctor.email}
+          </span>
+                    <span className='flex items-center'>
+            <FaLocationDot className='mr-2 text-cyan-700' />
+                        {doctor.address}
+          </span>
+                </div>
+                <a href={'/appointment/' + doctor._id}>
+                    <button className=' mt-4 rounded-lg bg-24b6e1 text-lg text-white font-chalkduster old pt-2 pb-2 px-4 inline'>
+                        Prendre RDV
+                    </button>
+                </a>
+            </div>
         </div>
-    </div>
-    </>
-    
-  )
+    );
 }
 
-export default MedecinCard
+export default MedecinCard;
