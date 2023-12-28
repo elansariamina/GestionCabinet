@@ -1,0 +1,21 @@
+.position-relative::before,
+.position-relative::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.position-relative::before {
+    background: radial-gradient(#ffffff 0.65px, #24b6e1 0.65px);
+    background-size: 13px 13px;
+    opacity: 0.9;
+}
+
+.position-relative::after {
+    background: radial-gradient(#ffffff 0.65px, #24b6e1 0.65px);
+    background-size: 13px 13px;
+    opacity: 0.9;
+}

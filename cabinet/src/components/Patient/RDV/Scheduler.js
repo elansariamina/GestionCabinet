@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import RdVcard from "./RDVcard";
 import AddRdVpopUp from "./AddRDVpop-up";
+import axios from "axios";
+import {useParams} from "react-router-dom";
 
 
 const Scheduler = () => {
-
-
+    const { id_med } = useParams();
+    const [doctorName, setDoctorName] = useState('');
+    const[service,setService]=useState('')
+    const token = localStorage.getItem('accessToken');
     const  times =["08:30","09:30","10:30","11:30","12:30","14:30","15:30","16:30","17:30"]
     const [currentMonth, setCurrentMonth] = useState(new Date());
     let isPassed=false;
     let isPastDay=false;
+    const [data,setData]=useState({})
 
     useEffect(() => {
          isPassed=false;
          isPastDay=false;
         setCurrentMonth(new Date());
-    }, []);
+        axios.get(`http://localhost:3001/api/doctors/getNameDoctorById/${id_med}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then(response => {
+                setDoctorName(response.data.name);
+                setService(response.data.spe)
+                setData({
+                    service:service,
+                    doctorName:doctorName,
+                    id_med:id_med
+                })
+            })
+            .catch(doctorError => {
+                console.error('Error getting doctor\'s name:', doctorError);
+            });
+    }, [service,doctorName]);
 
     const goToPreviousMonth = () => {
         const previousMonth = new Date(currentMonth);
@@ -63,9 +85,9 @@ const Scheduler = () => {
                 let hoverClasses = "";
 
                 if (isPastDay || isPassed) {
-                    cellClasses += " bg-gray-100 align-text-top";
+                    cellClasses += " bg-gray-100 align-text-top  font-pacifico";
                 } else {
-                    hoverClasses = "hover:bg-gray-300";
+                    hoverClasses = "hover:bg-gray-300 align-text-top  font-pacifico";
                 }
 
                 if (isPastDay || day > numDays) {
@@ -89,7 +111,7 @@ const Scheduler = () => {
                                                     key={time}
                                                     time={formattedTime}
                                                     date={date}
-
+                                                    data={data}
                                                 />
 
                                             );
@@ -109,10 +131,21 @@ const Scheduler = () => {
 
 
     return (
-        <div className="container mx-auto mt-10">
-            <div className="wrapper bg-white rounded shadow w-full">
+        <div className="container mx-auto pt-10 bg-24b6e1">
+            <div className='w-1/3 ml-12 bg-24b6e1 font-pacifico border-2 rounded-2xl p-4 border border-white'>
+                <p className='text-xl text-white mb-2'>
+                    Medecin: <span className='font-normal'>{doctorName}</span>
+                </p>
+                <p className='text-xl text-white'>
+                    Service: <span className='font-normal'>{service}</span>
+                </p>
+            </div>
+            <div className='m-6 flex items-center justify-center mx-auto max-w-screen-md bg-24b6e1 font-pacifico rounded-2xl p-4'>
+                <h6 className='text-xl text-white'>Choisissez un rendez-vous!</h6>
+            </div>
+            <div className="wrapper bg-gray-50 rounded shadow w-full">
                 <div className="header flex justify-between border-b p-2">
-                    <span className="text-lg font-bold">
+                    <span className="text-lg font-chalkduster text-#5ab1d0">
                         {currentMonth.toLocaleString('default', { year: 'numeric', month: 'long' })}
                     </span>
                     <div className="buttons">
@@ -134,7 +167,7 @@ const Scheduler = () => {
                 </div>
                 <div  className="max-h-[350px] overflow-y-scroll">
                     <table>
-                        <thead className="sticky top-0 bg-white">
+                        <thead className="sticky top-0 bg-cyan-700 text-white font-pacifico">
                         <tr>
                             <th>Dimanche</th>
                             <th>Lundi</th>
