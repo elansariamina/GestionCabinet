@@ -63,7 +63,7 @@ const AppointmentsViewer = () => {
         {appointments.length > 0 && (
     
           <>
-            <PatientInfo patientId={appointment?.id_patient} accessToken={accessToken} />
+            <PatientInfo patientId={appointment?.id_patient} medecinId={doctor._id} accessToken={accessToken} />
             <AnalyseAndTraitement key={keyForRerender} patientId={appointment?.id_patient} accessToken={accessToken} doctorId={appointment?.id_medecin} />
           </>
         )}
