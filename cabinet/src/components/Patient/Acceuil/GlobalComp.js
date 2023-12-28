@@ -42,7 +42,7 @@ const GlobalComp = () => {
                 setData(upcomingAppointment ? [upcomingAppointment] : []);
             })
             .catch((appointmentsError) => {
-                console.error('Error getting appointments:', appointmentsError);
+                // console.error('Error getting appointments:', appointmentsError);
             });
         axios.get(`http://localhost:3001/api/doctors/medDoc/${patient._id}`, {
             headers: {
