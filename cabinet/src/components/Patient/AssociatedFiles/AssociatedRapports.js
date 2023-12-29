@@ -172,12 +172,18 @@ function AssociatedRapports() {
     };
  const closeConfirm = ()=>{
      setError('');
-     window.location="/home";
+     if(localStorage.getItem("role") === 'assistant'){
+      window.location="/assistant";
+  }else if(localStorage.getItem("role") === 'patient')
+  {window.location="/home";}
  }
 
     const closeConfirmAfter = ()=>{
      setMessage('');
-        window.location="/home";
+     if(localStorage.getItem("role") === 'assistant'){
+      window.location="/assistant";
+  }else if(localStorage.getItem("role") === 'patient')
+        {window.location="/home";}
     };
 
 
