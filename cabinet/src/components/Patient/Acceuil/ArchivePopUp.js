@@ -1,71 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import axios from "axios";
 
-const DossierPopUp = ({ onclose }) => {
+const ArchivePopUp = ({onclose}) => {
     const token = localStorage.getItem('accessToken');
     const patient = JSON.parse(localStorage.getItem('patient'));
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const fileInputRef = useRef(null);
 
     useEffect(() => {
         axios
-            .get(`http://localhost:3001/api/rapports/nullContent/${patient._id}`, {
+            .get(`http://localhost:3001/api/rapports/${patient._id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((response) => {
-                setDocuments(response.data);
+                const currentDate = new Date();
+                const filteredReports = response.data.filter(report =>
+                    new Date(report.date) < currentDate && report.content !== null
+                );
+                setDocuments(filteredReports);
                 setLoading(false);
             })
             .catch((error) => {
                 console.error('Error getting docs:', error);
                 setLoading(false);
             });
-    }, [patient._id, token]);
+    }, [patient._id]);
 
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
+    const downloadFile = (data, fileName, fileType) => {
+        const blob = new Blob([new Uint8Array(data.data)], { type: fileType });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+        link.click();
     };
-
-    const handleCompleterClick = async (documentId) => {
-        if (!selectedFile) {
-            alert('Please select a PDF file.');
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-
-
-            const response = await axios.put(
-                `http://localhost:3001/api/rapports/${documentId}`,
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data', // Set content type to multipart/form-data
-                    },
-                }
-            );
-
-            console.log('File uploaded successfully:', response.data);
-        } catch (error) {
-            console.error('Error uploading file:', error);
-        } finally {
-            setSelectedFile(null)
-            setLoading(false);
-            window.location="/home"
-        }
-    };
-
-
 
     return (
         <div>
@@ -96,8 +65,7 @@ const DossierPopUp = ({ onclose }) => {
                             />
                         </svg>
                     </button>
-                    <h2 className="text-2xl font-pacifico mb-7 text-blue-900 text-center">Vos Dossiers Incomplets: </h2>
-
+                    <h2 className="text-2xl font-pacifico mb-7 text-blue-900 text-center">Vos Dossiers archivés: </h2>
                     {loading ? (
                         <p className="font-pacifico">En cours de traitement ...</p>
                     ) : documents.length > 0 ? (
@@ -127,43 +95,19 @@ const DossierPopUp = ({ onclose }) => {
                                         {document.type}
                                     </td>
                                     <td className="text-center">
-                                        <input
-                                            type="file"
-                                            accept=".pdf"
-                                            onChange={(event) => {
-                                                handleFileChange(event); // Manually trigger handleFileChange
-                                            }}
-                                            style={{ display: 'none' }}
-                                            ref={fileInputRef}
-                                        />
                                         <button
-                                            onClick={() => {
-                                                if (!loading) {
-                                                    fileInputRef.current.click();
-                                                }
-                                            }}
+                                            onClick={() => downloadFile(document.content, 'analyse.pdf', 'application/pdf')}
                                             className="hover:bg-cyan-100 text-blue-900 font-comicSans py-1 px-2 rounded"
-                                            disabled={loading}
                                         >
-                                            Choose PDF
+                                            Télécharger
                                         </button>
-
-                                        {selectedFile &&
-                                            <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-                                                <div className="absolute top-0 left-0 w-full h-full bg-gray-900 opacity-50"></div>
-                                                <div className="relative bg-white p-6 rounded-md shadow-md z-10 flex flex-col items-start">
-                                        <button className='text-blue-950 font-comicSans ' onClick={()=>handleCompleterClick(document._id)}>
-                                            Continuer
-                                        </button></div></div>
-                                        }
-
                                     </td>
                                 </tr>
                             ))}
                             </tbody>
                         </table>
                     ) : (
-                        <p>Aucun dossier incomplet trouvé.</p>
+                        <p>Aucun dossier archivé trouvé.</p>
                     )}
                 </div>
             </div>
@@ -171,4 +115,4 @@ const DossierPopUp = ({ onclose }) => {
     );
 };
 
-export default DossierPopUp;
+export default ArchivePopUp;
