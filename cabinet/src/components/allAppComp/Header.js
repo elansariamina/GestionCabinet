@@ -12,6 +12,8 @@ const Header = () => {
         localStorage.removeItem('password');
         localStorage.removeItem('patient');
         localStorage.removeItem('doctor');
+        localStorage.removeItem('acceuilComponentDisplayed');
+
 
         navigate('/');
     };

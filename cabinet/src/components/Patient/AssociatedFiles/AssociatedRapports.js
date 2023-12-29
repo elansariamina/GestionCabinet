@@ -8,6 +8,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import Alerts from "../RDV/Alerts";
+import * as pdfjs from "react";
 
 function AssociatedRapports() {
   const [selectedAnalyseFile, setSelectedAnalyseFile] = useState(null);
@@ -202,24 +203,26 @@ function AssociatedRapports() {
       <div className="flex text-center p-8 mx-40 font-chalkduster">
         <div className="w-1/2 mr-8 bg-white p-4 rounded-xl shadow-md">
           <h2 className="text-2xl  mb-4 text-#26a7cc">Importer vos Analyses</h2>
-          <FileInput
-            label='analyse'
-            onChange={(file) => handleFileChange('analyse', file)}
-            selectedFile={selectedAnalyseFile}
-            onUpload={() => handleFileUpload('analyse')}
-            handle = {(file) => handlePdfAnalyse(file)}
-          />
+            <FileInput
+                label='analyse'
+                onChange={(file) => handleFileChange('analyse', file)}
+                selectedFile={selectedAnalyseFile}
+                onUpload={() => handleFileUpload('analyse')}
+                handle={(file) => handlePdfAnalyse(file)}
+            />
+
+
         </div>
 
         <div className="w-1/2 bg-white p-4 rounded-xl shadow-md">
           <h2 className="text-2xl text-#26a7cc mb-4">Importer vos Scans</h2>
-          <FileInput
-            label='scan'
-            onChange={(file) => handleFileChange('scan', file)}
-            selectedFile={selectedScanFile}
-            onUpload={() => handleFileUpload('scan')}
-            handle = {(file) => handlePdfScan(file)}
-          />
+            <FileInput
+                label='scan'
+                onChange={(file) => handleFileChange('scan', file)}
+                selectedFile={selectedScanFile}
+                onUpload={() => handleFileUpload('scan')}
+                handle={(file) => handlePdfScan(file)}
+            />
         </div>
       </div>
       <div className='mx-12 bg-white p-4 rounded-lg shadow-md'>
@@ -227,15 +230,15 @@ function AssociatedRapports() {
         <div className='text-center'>
           
             <FileList title="Vos analyses:" color="blue" />
-          {pdfFileAnalyse && (
-            <div>
-          <div className='w-3/4 mx-auto my-8 h-60 flex justify-center'>
-              <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
-                <Viewer fileUrl={pdfFileAnalyse} plugins={[newplugin]} />
-              </Worker>
-              </div>
-              <button onClick={(index) => removeFile('analyse', index)} className='text-blue-900 border-b-2 border-b-blue-950 font-chalkduster mx-6 p-1 hover:shadow-lg'>Supprimer le fichier</button>
-            </div>
+            {pdfFileAnalyse && (
+                <div>
+                    <div className='w-3/4 mx-auto my-8 h-60 flex justify-center'>
+                        <Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`}>
+                            <Viewer fileUrl={pdfFileAnalyse} plugins={[newplugin]} />
+                        </Worker>
+                    </div>
+                    <button onClick={(index) => removeFile('analyse', index)} className='text-blue-900 border-b-2 border-b-blue-950 font-chalkduster mx-6 p-1 hover:shadow-lg'>Supprimer le fichier</button>
+                </div>
             )}
           
             <FileList title="Vos scans:" color="blue" />
@@ -275,35 +278,32 @@ const FileList = ({ title, color }) => (
 );
 
 const FileInput = ({ label, onChange, selectedFile, onUpload, handle }) => (
-  <>
-    <label htmlFor={label}>
+    <>
+        <label htmlFor={label}>
       <span
-        className='inline-block p-6 rounded-full hover:shadow-lg transition-transform ease duration-300'
-        style={{ display: 'inline-block' }}>
+          className='inline-block p-6 rounded-full hover:shadow-lg transition-transform ease duration-300'
+          style={{ display: 'inline-block' }}>
         {label === "analyse" ? <UploadSvg width="120" height="120" className="cursor-pointer text-center" /> : <UploadSvgV width="120" height="120" className="cursor-pointer text-center" />}
       </span>
-    </label>
+        </label>
 
-    <input
-      type="file"
-      id={label}
-      className="hidden"
-      accept=".pdf"
-      onChange={(e) => {
-        const file = e.target.files[0];
-        if(file){
-          handle(file);
-        }
-        if (!selectedFile) {
-          onChange(file);
-        } else {
-          alert(`You have already selected a file for ${label}. Please upload it first.`);
-        }
-      }}
-    />
-    {onUpload()}
-  </>
+        <input
+            type="file"
+            id={label}
+            className="hidden"
+            accept=".pdf"
+            onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    handle(file);
+                    onChange(file);  // Moved onChange inside the if block
+                }
+            }}
+        />
+        {selectedFile && onUpload()} {/* Moved onUpload() inside the conditional rendering */}
+    </>
 );
+
 
 
     
